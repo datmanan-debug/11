@@ -142,6 +142,7 @@ elif st.session_state.page == 2:
         st.button("Next: Upload DICOM →", on_click=next_page)
 
 # ==========================================
+# ==========================================
 # الواجهة 3: رفع ملف الـ DICOM (Upload File)
 # ==========================================
 elif st.session_state.page == 3:
@@ -160,8 +161,8 @@ elif st.session_state.page == 3:
     """, unsafe_allow_html=True)
     st.markdown("</div>", unsafe_allow_html=True)
     
-    # إضافة لمسة محاكاة الذكاء الاصطناعي (AI Scanning Process) عند الرفع
-    if uploaded_file is not My_Upload_Object := None:
+    # تصحيح السطر 164 هنا:
+    if uploaded_file is not None:
         with st.spinner("AI Engine running inference... Processing pixel arrays and neural layers."):
             time.sleep(2) # محاكاة وقت التحليل
         st.success("Analysis complete. Ready to view results.")
@@ -171,8 +172,6 @@ elif st.session_state.page == 3:
         st.button("← Back", on_click=prev_page)
     with col_next:
         st.button("Run AI Diagnostics →", on_click=next_page)
-
-# ==========================================
 # الواجهة 4: النتيجة الأولية (Normal / Abnormal)
 # ==========================================
 elif st.session_state.page == 4:
