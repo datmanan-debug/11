@@ -1,4 +1,4 @@
-﻿import streamlit as st
+import streamlit as st
 import time
 
 # 1. إعدادات الصفحة الأساسية والثيم الرسمي
@@ -50,11 +50,6 @@ st.markdown("""
         box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
     
-    /* زر التراجع بلون محايد */
-    div[data-testid="stMarkdownContainer"] + div {
-        margin-top: 10px;
-    }
-    
     /* تأثير الباركود الرقمي أو لمسة الذكاء الاصطناعي */
     .ai-badge {
         background-color: #EBF8FF;
@@ -68,7 +63,7 @@ st.markdown("""
         border: 1px solid #BEE3F8;
     }
     </style>
-""", unsafe_allow_error=True)
+""", unsafe_allow_html=True) # تم تصحيح الكلمة هنا لتعمل بشكل سليم
 
 # 3. إدارة التنقل بين الصفحات الخمس باستخدام Session State
 if 'page' not in st.session_state:
@@ -113,6 +108,7 @@ if st.session_state.page == 1:
     with col2:
         st.button("Proceed to Clinical Portal", on_click=next_page)
     st.markdown("</div>", unsafe_allow_html=True)
+
 # ==========================================
 # الواجهة 2: بيانات المريض الطبية (Patient Info)
 # ==========================================
@@ -142,7 +138,6 @@ elif st.session_state.page == 2:
         st.button("Next: Upload DICOM →", on_click=next_page)
 
 # ==========================================
-# ==========================================
 # الواجهة 3: رفع ملف الـ DICOM (Upload File)
 # ==========================================
 elif st.session_state.page == 3:
@@ -161,10 +156,9 @@ elif st.session_state.page == 3:
     """, unsafe_allow_html=True)
     st.markdown("</div>", unsafe_allow_html=True)
     
-    # تصحيح السطر 164 هنا:
     if uploaded_file is not None:
         with st.spinner("AI Engine running inference... Processing pixel arrays and neural layers."):
-            time.sleep(2) # محاكاة وقت التحليل
+            time.sleep(2) 
         st.success("Analysis complete. Ready to view results.")
         
     col_back, col_next = st.columns([1, 1])
@@ -172,6 +166,8 @@ elif st.session_state.page == 3:
         st.button("← Back", on_click=prev_page)
     with col_next:
         st.button("Run AI Diagnostics →", on_click=next_page)
+
+# ==========================================
 # الواجهة 4: النتيجة الأولية (Normal / Abnormal)
 # ==========================================
 elif st.session_state.page == 4:
@@ -181,7 +177,6 @@ elif st.session_state.page == 4:
     st.markdown("<div class='custom-card' style='text-align: center;'>", unsafe_allow_html=True)
     st.markdown("<span class='ai-badge'>Classification Layer: Binary Screening</span>", unsafe_allow_html=True)
     
-    # عرض النتائج بشكل رسمي مع الـ Confidence Score كما اقترح المشرف
     col_res1, col_res2 = st.columns(2)
     
     with col_res1:
@@ -193,7 +188,6 @@ elif st.session_state.page == 4:
         """, unsafe_allow_html=True)
         
     with col_res2:
-        # جعل الخيار النشط يبرز بلون واضح ورسمي (مثل الوردي الطبي الغامق أو الأحمر الهادئ للتحذير)
         st.markdown("""
             <div style='border: 2px solid #9B2C2C; padding: 20px; border-radius: 6px; background-color: #FFF5F5;'>
                 <h3 style='color: #9B2C2C !important; margin: 0;'>ABNORMAL FINDINGS</h3>
@@ -202,8 +196,7 @@ elif st.session_state.page == 4:
         """, unsafe_allow_html=True)
         
     st.markdown("""
-        <div style='text-align: left; margin-top: 20px; padding: 15px; background-color: #EDF2F7; border-radius: 6px; font-size: 0.9rem;'>
-            💡 <b>AI Recommendation:</b> Micro-calcifications or mass density detected. Secondary classification required to determine pathological nature.
+        <div style='text-align: left; margin-top: 20px; padding: 15px; background-color: #EDF2F7; border-radius: 6px; font-size: 0.9rem;'>💡 <b>AI Recommendation:</b> Micro-calcifications or mass density detected. Secondary classification required to determine pathological nature.
         </div>
     """, unsafe_allow_html=True)
     st.markdown("</div>", unsafe_allow_html=True)
