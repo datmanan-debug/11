@@ -62,8 +62,23 @@ st.markdown("""
         margin-bottom: 15px;
         border: 1px solid #BEE3F8;
     }
+
+    /* تنسيق ملصق الشعار في المنتصف */
+    .logo-sticker {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        border: 2px solid #1A365D;
+        padding: 12px 25px;
+        border-radius: 12px;
+        margin-bottom: 25px;
+        background-color: #1A365D;
+        color: white;
+        box-shadow: 0 4px 10px rgba(26, 54, 93, 0.2);
+    }
     </style>
-""", unsafe_allow_html=True) # تم تصحيح الكلمة هنا لتعمل بشكل سليم
+""", unsafe_allow_html=True)
 
 # 3. إدارة التنقل بين الصفحات الخمس باستخدام Session State
 if 'page' not in st.session_state:
@@ -82,29 +97,24 @@ def prev_page(): st.session_state.page -= 1
 if st.session_state.page == 1:
     st.markdown("<div style='text-align: center; margin-top: 50px;'>", unsafe_allow_html=True)
     
-    # محاكاة مكان اللوغو بنص رسمي منسق
-    st.markdown("""
-        <div style='border: 2px solid #1A365D; display: inline-block; padding: 15px 30px; border-radius: 6px; margin-bottom: 20px; background-color: #1A365D; color: white;'>
-            <span style='font-size: 1.5rem; font-weight: bold; letter-spacing: 2px;'>ENGINEERING TITANS</span>
-        </div>
-    """, unsafe_allow_html=True)
+    # حاوية ملصق الشعار (النص والصورة بجانبه بالمنتصف)
+    col_center, _ = st.columns([1, 0.01]) # خدعة لتوسيط محتوى الـ HTML داخل ستريمليت بشكل مرن
+    with col_center:
+        st.markdown("""
+            <div class='logo-sticker'>
+                <span style='font-size: 1.5rem; font-weight: bold; letter-spacing: 2px;'>ENGINEERING TITANS</span>
+                <img src='app/static/m.png' style='height: 40px; border-radius: 4px; vertical-align: middle;'>
+            </div>
+        """, unsafe_allow_html=True)
+        # ملاحظة: تأكد من وضع الصورة باسم m.png داخل مجلد باسم static بجانب ملف السكربت، أو استبدل المسار برابط مباشر للصورة.
     
     st.title("Mammogram AI Diagnostics System")
     st.markdown("<p style='color: #4A5568; font-size: 1.1rem;'>Integrating Engineering Precision with Medical Artificial Intelligence</p>", unsafe_allow_html=True)
-    st.markdown("<hr style='border-top: 1px solid #CBD5E0; width: 50%; margin: 20px auto;'>", unsafe_allow_html=True)
-    
-    st.markdown("""
-        <div class='custom-card' style='max-width: 500px; margin: 0 auto; text-align: left;'>
-            <span class='ai-badge'>System Status: Ready</span>
-            <p style='color: #718096; font-size: 0.9rem; line-height: 1.6;'>
-                This clinical-grade software utilizes deep learning architectures to assist medical professionals in mammogram screening and early breast cancer classification.
-            </p>
-            <p style='font-size: 0.8rem; color: #A0AEC0;'>Version 1.0.0 • Verified Deployment</p>
-        </div>
-    """, unsafe_allow_html=True)
+    st.markdown("<hr style='border-top: 1px solid #CBD5E0; width: 50%; margin: 30px auto;'>", unsafe_allow_html=True)
     
     st.write("")
-    col1, col2, col3 = st.columns([1, 2, 1])
+    st.write("")
+    col1, col2, col3 = st.columns([1, 1.5, 1])
     with col2:
         st.button("Proceed to Clinical Portal", on_click=next_page)
     st.markdown("</div>", unsafe_allow_html=True)
@@ -156,23 +166,25 @@ elif st.session_state.page == 3:
     """, unsafe_allow_html=True)
     st.markdown("</div>", unsafe_allow_html=True)
     
+    file_ready = False
     if uploaded_file is not None:
+        file_ready = True
         with st.spinner("AI Engine running inference... Processing pixel arrays and neural layers."):
-            time.sleep(2) 
+            time.sleep(1.5) 
         st.success("Analysis complete. Ready to view results.")
         
     col_back, col_next = st.columns([1, 1])
     with col_back:
         st.button("← Back", on_click=prev_page)
     with col_next:
-        st.button("Run AI Diagnostics →", on_click=next_page)
+        st.button("Run AI Diagnostics →", on_click=next_page, disabled=not file_ready)
 
 # ==========================================
 # الواجهة 4: النتيجة الأولية (Normal / Abnormal)
 # ==========================================
 elif st.session_state.page == 4:
     st.subheader("🔬 AI Diagnostic Analysis Result")
-    st.markdown(f"Analysis for Patient: **{st.session_state.patient_name}**")
+    st.markdown(f"Analysis for Patient: **{st.session_state.patient_name if st.session_state.patient_name else 'Anonymous'}**")
     
     st.markdown("<div class='custom-card' style='text-align: center;'>", unsafe_allow_html=True)
     st.markdown("<span class='ai-badge'>Classification Layer: Binary Screening</span>", unsafe_allow_html=True)
